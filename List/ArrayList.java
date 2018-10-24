@@ -49,7 +49,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     private boolean isFull() {
-        return size == elements.length;
+        return size == elements.length - 1;
     }
     
     public boolean contains(Object obj) {
