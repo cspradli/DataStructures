@@ -47,7 +47,7 @@ public class ArrayList<E> implements List<E> {
     public boolean isEmpty() {
         return size == 0;
     }
-
+    // -1 is used to not have remove method run over
     private boolean isFull() {
         return size == elements.length - 1;
     }
