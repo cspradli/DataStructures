@@ -2,7 +2,7 @@
 * An interface specifying some basic list operations.
 *
 * @author Charley Sheaffer
-* @version 10/23/2018
+* @version 10/28/2018
 *
 */
 
@@ -18,7 +18,10 @@ public interface List<E> {
 	*   @param obj the object to look for in the list
 	*   @return true, if the given object is in the list, false otherwise
 	*/
-	public boolean contains(Object obj);
+    default boolean contains(Object obj) {
+        return indexOf(obj) >= 0;
+    }
+    
     
     /**
     *   Finds the index of a given object.
@@ -41,7 +44,10 @@ public interface List<E> {
     *   @param element element to be added to the list
     *   @return true if element added, false otherwise
     */
-	public boolean add(E element);
+    default boolean add(E element) {
+        return add(size(), element);
+    }
+    
 
     /**
     *   Inserts a new element before a specified index.
@@ -60,7 +66,13 @@ public interface List<E> {
     *   @return true if the element exists and was removed, false if the 
     *   element was not present in the list
     */
-	public boolean remove(Object obj);
+    default boolean remove(Object obj) {
+        int index = indexOf(obj);
+        if (index == -1) return false;
+        remove(index);
+        return true;
+    }
+    
 
     /**
     *   Removes the element at a specified index.
@@ -91,7 +103,9 @@ public interface List<E> {
 	*   Determines whether there are any elements in the list
 	*   @return true, if there are no elements in the list, false otherwise
 	*/
-	public boolean isEmpty();
+    default boolean isEmpty() {
+        return size() == 0;
+    }
 
     /**
     *   Returns the hash code for this list.

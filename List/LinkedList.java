@@ -2,7 +2,7 @@
 * A linked list implementation of the List interface.
 *
 * @author Charley Sheaffer
-* @version 10/23/2018
+* @version 10/28/2018
 *
 */
 public class LinkedList<E> implements List<E> {
@@ -48,10 +48,6 @@ public class LinkedList<E> implements List<E> {
       return true;
   }
   
-  public boolean isEmpty() {
-      return size == 0;
-  }
-
   /*
   * Returns the node immediately before the node with a given index.
   */
@@ -64,10 +60,6 @@ public class LinkedList<E> implements List<E> {
       return current;
   }
 
-	public boolean contains(Object obj) {
-      return indexOf(obj) != -1;
-	}
-    
   public int indexOf(Object obj) {
       Node<E> current = head.next;
       int index = 0;
@@ -80,35 +72,23 @@ public class LinkedList<E> implements List<E> {
       return -1;
   }
     
-  public E get(int index) {
+    public E get(int index) {
       return getNodeBefore(index).next.data;
   }
 
-	public boolean add(E element) {
-	    tail.next = new Node<>(element);
-	    tail = tail.next;
-	    size++;
-      return true;
-	}
-
 	public boolean add(int index, E element) {
-    if (index == size) {
-      add(element);
-    }
-    else {
-	    Node<E> previous = getNodeBefore(index);
-	    Node<E> current = new Node<>(element, previous.next);
-	    previous.next = current;
-	    if (tail == previous)
-	        tail = current;
-	    size++;
-    }
-    return true;
+      Node<E> previous = (index == size) ? tail : getNodeBefore(index);
+      Node<E> current = new Node<>(element, previous.next);
+      previous.next = current;
+      if (tail == previous)
+        tail = current;
+      size++;
+      return true;
 	}
 
 	public E remove(int index) {
 	    Node<E> previous = getNodeBefore(index);
-      E data = previous.next.data;
+        E data = previous.next.data;
 	    previous.next = previous.next.next;
 	    if (previous.next == null)
 	        tail = previous;
@@ -116,26 +96,43 @@ public class LinkedList<E> implements List<E> {
       return data;
 	}
 
-  public boolean remove(Object obj) {
-      Node<E> current = head;
-      while (current.next != null) {
-        if (current.next.data.equals(obj)) {
-          current.next = current.next.next;
-          if (current.next == null) tail = current;
-          return true;
-        }
-        current = current.next;
-      }
-      return false;
-  }
-
 	public E set(int index, E element) {
       Node<E> before = getNodeBefore(index);
       E data = before.next.data;
-	    before.next.data = element;
+	  before.next.data = element;
       return data;
 	}
 	
+    @Override
+    public int hashCode() {
+        int hash = 11;
+        Node<E> current = head.next;
+        while (current != null) {
+            hash = 23 * hash + current.data.hashCode();
+            current = current.next;
+        }
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        @SuppressWarnings("unchecked")
+        LinkedList<E> list = (LinkedList<E>) obj;
+        if (size != list.size) return false;
+        Node<E> current = head.next;
+        Node<E> otherCurrent = list.head.next;
+        while (current != null) {
+            if (!current.data.equals(otherCurrent.data))
+                return false;
+            current = current.next;
+            otherCurrent = otherCurrent.next;
+        }
+        return true;
+    }
+    
 	@Override
 	public String toString() {
 	    if (size == 0) return "[ ]";

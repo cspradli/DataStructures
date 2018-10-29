@@ -2,7 +2,7 @@
 * An array implementation of the List interface.
 *
 * @author Charley Sheaffer
-* @version 10/23/2018
+* @version 10/28/2018
 *
 */
 
@@ -44,16 +44,8 @@ public class ArrayList<E> implements List<E> {
         return true;
     }
     
-    public boolean isEmpty() {
-        return size == 0;
-    }
-    // -1 is used to not have remove method run over
     private boolean isFull() {
-        return size == elements.length - 1;
-    }
-    
-    public boolean contains(Object obj) {
-        return indexOf(obj) >= 0;
+        return size == elements.length;
     }
     
     public int indexOf(Object obj) {
@@ -69,11 +61,9 @@ public class ArrayList<E> implements List<E> {
         return elements[index];
     }
     
-    public boolean add(E element) {
-        return add(size, element);
-    }
-    
     public boolean add(int index, E element) {
+        if (index < 0 || index > size)
+            throw new IndexOutOfBoundsException("index: " + index);
         if (isFull()) extendArray();
         for (int i=size; i>index; i--) 
             elements[i] = elements[i-1];
@@ -88,13 +78,6 @@ public class ArrayList<E> implements List<E> {
             elements[i] = elements[i+1];
         size--;
         return element;
-    }
-    
-    public boolean remove(Object obj) {
-        int index = indexOf(obj);
-        if (index == -1) return false;
-        remove(index);
-        return true;
     }
     
     public E set(int index, E element) {
